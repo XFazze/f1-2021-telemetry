@@ -2,7 +2,7 @@
 
 ## Goals
 
-### During and after Race
+** During and after Race **
 
 - Player list
 - Session information
