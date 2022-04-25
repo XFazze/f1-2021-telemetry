@@ -1,14 +1,19 @@
 import { F1TelemetryClient } from 'f1-2021-udp';
-
+import csvAppend from 'csv-append';
+const ObjectsToCsv = require('objects-to-csv');
+const fs = require('fs');
 const client: F1TelemetryClient = new F1TelemetryClient();
-
-// motion 0
-client.on('motion', function (data) {
-	console.log(data);
-});
 
 // session 1
 client.on('session', function (data) {
+	console.log(data);
+	const { append, end } = csvAppend('db.csv', true);
+	append(data);
+	client.stop();
+});
+/*
+// motion 0
+client.on('motion', function (data) {
 	console.log(data);
 });
 
@@ -61,6 +66,12 @@ client.on('carDamage', function (data) {
 client.on('sessionHistory', function (data) {
 	console.log(data);
 });
+*/
 
 // to start listening:
+
+//async () => {
+//	await end();
+//};
+
 client.start();
