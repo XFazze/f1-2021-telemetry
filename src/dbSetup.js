@@ -15,11 +15,16 @@ function dbSetup() {
     telemetryData(db);
     cartelemetryData(db);
     carStatus(db);
+    carDamage(db);
     return db;
 }
 exports.dbSetup = dbSetup;
+function carDamage(db) {
+    db.run("CREATE TABLE IF NOT EXISTS carDamage(m_tyresWear REAL,\n                m_tyresDamage INT,\n                m_brakesDamage INT,\n                m_frontLeftWingDamage INT,\n                m_frontRightWingDamage INT,\n                m_rearWingDamage INT,\n                m_floorDamage INT,\n                m_diffuserDamage INT,\n                m_sidepodDamage INT,\n                m_drsFault INT,\n                m_gearBoxDamage INT,\n                m_engineDamage INT,\n                m_engineMGUHWear INT,\n                m_engineESWear INT,\n                m_engineCEWear INT,\n                m_engineICEWear INT,\n                m_engineMGUKWear INT,\n                m_engineTCWear INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
+    return;
+}
 function carStatus(db) {
-    db.run("CREATE TABLE IF NOT EXISTS carStatus(m_tractionControl INT,\n                m_antiLockBrakes INT,\n                m_fuelMix INT,\n                m_frontBrakeBias INT,\n                m_pitLimiterStatus INT,\n                m_fuelInTank INT,\n                m_fuelCapacity INT,\n                m_fuelRemainingLaps INT,\n                m_maxRPM INT,\n                m_idleRPM INT,\n                m_maxGears INT,\n                m_drsAllowed INT,\n                m_drsActivationDistance INT,\n                m_actualTyreCompound INT,\n                m_visualTyreCompound INT,\n                m_tyresAgeLaps INT,\n                m_vehicleFiaFlags INT,\n                m_ersStoreEnergy INT,\n                m_ersDeployMode INT,\n                m_ersHarvestedThisLapMGUK INT,\n                m_ersHarvestedThisLapMGUH INT,\n                m_ersDeployedThisLap INT,\n                m_networkPaused INT,\n                m_sessionUID INT,\n                m_sessionTime INT,\n                m_frameIdentifier INT,\n                indexx INT);");
+    db.run("CREATE TABLE IF NOT EXISTS carStatus(m_tractionControl INT,\n                m_antiLockBrakes INT,\n                m_fuelMix INT,\n                m_frontBrakeBias INT,\n                m_pitLimiterStatus INT,\n                m_fuelInTank REAL,\n                m_fuelCapacity REAL,\n                m_fuelRemainingLaps REAL,\n                m_maxRPM INT,\n                m_idleRPM INT,\n                m_maxGears INT,\n                m_drsAllowed INT,\n                m_drsActivationDistance INT,\n                m_actualTyreCompound INT,\n                m_visualTyreCompound INT,\n                m_tyresAgeLaps INT,\n                m_vehicleFiaFlags INT,\n                m_ersStoreEnergy REAL,\n                m_ersDeployMode INT,\n                m_ersHarvestedThisLapMGUK REAL,\n                m_ersHarvestedThisLapMGUH REAL,\n                m_ersDeployedThisLap REAL,\n                m_networkPaused INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
     return;
 }
 function telemetryData(db) {

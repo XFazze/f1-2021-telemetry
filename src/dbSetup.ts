@@ -19,9 +19,35 @@ export function dbSetup() {
 	cartelemetryData(db);
 
 	carStatus(db);
+
+	carDamage(db);
 	return db;
 }
-
+function carDamage(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS carDamage(m_tyresWear REAL,
+                m_tyresDamage INT,
+                m_brakesDamage INT,
+                m_frontLeftWingDamage INT,
+                m_frontRightWingDamage INT,
+                m_rearWingDamage INT,
+                m_floorDamage INT,
+                m_diffuserDamage INT,
+                m_sidepodDamage INT,
+                m_drsFault INT,
+                m_gearBoxDamage INT,
+                m_engineDamage INT,
+                m_engineMGUHWear INT,
+                m_engineESWear INT,
+                m_engineCEWear INT,
+                m_engineICEWear INT,
+                m_engineMGUKWear INT,
+                m_engineTCWear INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+	return;
+}
 function carStatus(db) {
 	db.run(`CREATE TABLE IF NOT EXISTS carStatus(m_tractionControl INT,
                 m_antiLockBrakes INT,

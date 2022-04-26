@@ -5,19 +5,19 @@ var dbSetup_1 = require("./dbSetup");
 var fs = require('fs');
 var db = (0, dbSetup_1.dbSetup)();
 var client = new f1_2021_udp_1.F1TelemetryClient();
-// car status 7
-client.on('carStatus', function (data) {
+// car damage 10
+client.on('carDamage', function (data) {
     var m_header = data['m_header'];
     delete data['m_header'];
-    var m_carStatusData = data['m_carStatusData'];
-    delete data['m_carStatusData'];
-    for (var i = 0; i < m_carStatusData.length; i++) {
-        var car = m_carStatusData[i];
+    var m_carDamageData = data['m_carDamageData'];
+    delete data['m_carDamageData'];
+    for (var i = 0; i < m_carDamageData.length; i++) {
+        var car = m_carDamageData[i];
         car['m_sessionUID'] = m_header['m_sessionUID'];
         car['m_sessionTime'] = m_header['m_sessionTime'];
         car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
         car['indexx'] = i;
-        db.run('INSERT INTO carStatus VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(car));
+        db.run('INSERT INTO carDamage VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(car));
     }
     client.stop();
 });
@@ -39,10 +39,6 @@ client.on('lobbyInfo', function (data) {
     console.log(data);
 });
 
-// car damage 10
-client.on('carDamage', function (data) {
-    console.log(data);
-});
 
 // session history 11
 client.on('sessionHistory', function (data) {
@@ -176,6 +172,27 @@ client.on('carTelemetry', function (data) {
         car['indexx'] = i;
         db.run('INSERT INTO carTelemetry VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
     }
+});
+// car status 7
+client.on('carStatus', function (data) {
+    var m_header = data['m_header'];
+    delete data['m_header'];
+
+    var m_carStatusData = data['m_carStatusData'];
+    delete data['m_carStatusData'];
+
+    for (let i = 0; i < m_carStatusData.length; i++) {
+        const car = m_carStatusData[i];
+        car['m_sessionUID'] = m_header['m_sessionUID'];
+        car['m_sessionTime'] = m_header['m_sessionTime'];
+        car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+        car['indexx'] = i;
+        db.run(
+            'INSERT INTO carStatus VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+            objToListOfValues(car)
+        );
+    }
+    client.stop();
 });
 
 */
