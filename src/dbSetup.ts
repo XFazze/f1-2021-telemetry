@@ -13,7 +13,39 @@ export function dbSetup() {
 	participantData(db);
 	carParticipantData(db);
 
+	carSetupData(db);
+
 	return db;
+}
+
+function carSetupData(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS carSetupData(m_frontWing INT,
+                m_rearWing INT,
+                m_onThrottle INT,
+                m_offThrottle INT,
+                m_frontCamber REAL,
+                m_rearCamber REAL,
+                m_frontToe REAL,
+                m_rearToe REAL,
+                m_frontSuspension INT,
+                m_rearSuspension INT,
+                m_frontAntiRollBar INT,
+                m_rearAntiRollBar INT,
+                m_frontSuspensionHeight INT,
+                m_rearSuspensionHeight INT,
+                m_brakePressure INT,
+                m_brakeBias INT,
+                m_rearLeftTyrePressure REAL,
+                m_rearRightTyrePressure REAL,
+                m_frontLeftTyrePressure REAL,
+                m_frontRightTyrePressure REAL,
+                m_ballast INT,
+                m_fuelLoad REAL,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+	return;
 }
 function carParticipantData(db) {
 	db.run(`CREATE TABLE IF NOT EXISTS carParticipantsData(m_aiControlled INT,

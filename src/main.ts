@@ -6,7 +6,59 @@ const db = dbSetup();
 
 const client: F1TelemetryClient = new F1TelemetryClient();
 
+// car setup 5
+client.on('carSetups', function (data) {
+	var m_header = data['m_header'];
+	delete data['m_header'];
+	var m_carSetups = data['m_carSetups'];
+	for (let i = 0; i < m_carSetups.length; i++) {
+		const car = m_carSetups[i];
+		car['m_sessionUID'] = m_header['m_sessionUID'];
+		car['m_sessionTime'] = m_header['m_sessionTime'];
+		car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+		car['indexx'] = i;
+		db.run(
+			'INSERT INTO carSetupData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+			objToListOfValues(car)
+		);
+	}
+	client.stop();
+});
 /*
+// event 3
+client.on('event', function (data) {
+	console.log(data);
+});
+
+// car telemetry 6
+client.on('carTelemetry', function (data) {
+	console.log(data);
+});
+
+// car status 7
+client.on('carStatus', function (data) {
+	console.log(data);
+});
+
+// final classification 8
+client.on('finalClassification', function (data) {
+	console.log(data);
+});
+
+// lobby info 9
+client.on('lobbyInfo', function (data) {
+	console.log(data);
+});
+
+// car damage 10
+client.on('carDamage', function (data) {
+	console.log(data);
+});
+
+// session history 11
+client.on('sessionHistory', function (data) {
+	console.log(data);
+});
 // motion 0
 client.on('motion', function (data) {
 	var m_carMotionData = data['m_carMotionData'];
@@ -75,10 +127,6 @@ client.on('lapData', function (data) {
 		);
 	}
 });
-// event 3
-client.on('event', function (data) {
-	console.log(data);
-});
 // participants 4
 client.on('participants', function (data) {
 	var m_participants = data['m_participants'];
@@ -102,40 +150,6 @@ client.on('participants', function (data) {
 });
 
 
-// car setup 5
-client.on('carSetups', function (data) {
-	console.log(data);
-});
-
-// car telemetry 6
-client.on('carTelemetry', function (data) {
-	console.log(data);
-});
-
-// car status 7
-client.on('carStatus', function (data) {
-	console.log(data);
-});
-
-// final classification 8
-client.on('finalClassification', function (data) {
-	console.log(data);
-});
-
-// lobby info 9
-client.on('lobbyInfo', function (data) {
-	console.log(data);
-});
-
-// car damage 10
-client.on('carDamage', function (data) {
-	console.log(data);
-});
-
-// session history 11
-client.on('sessionHistory', function (data) {
-	console.log(data);
-});
 */
 
 // to start listening:

@@ -11,9 +11,14 @@ function dbSetup() {
     lapData(db);
     participantData(db);
     carParticipantData(db);
+    carSetupData(db);
     return db;
 }
 exports.dbSetup = dbSetup;
+function carSetupData(db) {
+    db.run("CREATE TABLE IF NOT EXISTS carSetupData(m_frontWing INT,\n                m_rearWing INT,\n                m_onThrottle INT,\n                m_offThrottle INT,\n                m_frontCamber REAL,\n                m_rearCamber REAL,\n                m_frontToe REAL,\n                m_rearToe REAL,\n                m_frontSuspension INT,\n                m_rearSuspension INT,\n                m_frontAntiRollBar INT,\n                m_rearAntiRollBar INT,\n                m_frontSuspensionHeight INT,\n                m_rearSuspensionHeight INT,\n                m_brakePressure INT,\n                m_brakeBias INT,\n                m_rearLeftTyrePressure REAL,\n                m_rearRightTyrePressure REAL,\n                m_frontLeftTyrePressure REAL,\n                m_frontRightTyrePressure REAL,\n                m_ballast INT,\n                m_fuelLoad REAL,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
+    return;
+}
 function carParticipantData(db) {
     db.run("CREATE TABLE IF NOT EXISTS carParticipantsData(m_aiControlled INT,\n                m_driverId INT,\n                m_networkId INT,\n                m_teamId INT,\n                m_myTeam INT,\n                m_raceNumber INT,\n                m_nationality INT,\n                m_name TEXT,\n                m_yourTelemetry INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
     return;
