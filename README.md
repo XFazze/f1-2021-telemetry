@@ -9,15 +9,13 @@ Using [raweceek's library](https://github.com/raweceek-temeletry/f1-2021-udp 'Gi
 
 ## Saving packets
 
-### 0 Motion [ ]
+### 0 Motion [x]
 
-### 1 Session [ ]
-
-TODO Marshallzones and flags needs to be saved, how?
-TODO weatherForecastSamples decide Needed?
-TODO working?
+### 1 Session [x]
 
 ### 2 Lap Data [ ]
+
+In progress
 
 ### 3 Event [ ]
 

@@ -2,13 +2,61 @@ var sqlite3 = require('sqlite3').verbose();
 
 export function dbSetup() {
 	const db = new sqlite3.Database('main.db');
+	motionData(db);
+	carMotionData(db);
+
 	session(db);
 	marshalZones(db);
-	weatherForecastSamples(db);
 
 	return db;
 }
-
+function motionData(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS motionData(m_header REAL,
+                m_suspensionPosition REAL,
+                m_suspensionVelocity REAL,
+                m_suspensionAcceleration REAL,
+                m_wheelSpeed REAL,
+                m_wheelSlip REAL,
+                m_localVelocityX REAL,
+                m_localVelocityY REAL,
+                m_localVelocityZ REAL,
+                m_angularVelocityX REAL,
+                m_angularVelocityY REAL,
+                m_angularVelocityZ REAL,
+                m_angularAccelerationX REAL,
+                m_angularAccelerationY REAL,
+                m_angularAccelerationZ REAL,
+                m_frontWheelsAngle REAL
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT);`);
+	return;
+}
+function carMotionData(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS carMotionData(m_worldPositionX REAL,
+                m_worldPositionY REAL,
+                m_worldPositionZ REAL,
+                m_worldVelocityX REAL,
+                m_worldVelocityY REAL,
+                m_worldVelocityZ REAL,
+                m_worldForwardDirX INT,
+                m_worldForwardDirY INT,
+                m_worldForwardDirZ INT,
+                m_worldRightDirX INT,
+                m_worldRightDirY INT,
+                m_worldRightDirZ INT,
+                m_gForceLateral REAL,
+                m_gForceLongitudinal REAL,
+                m_gForceVertical REAL,
+                m_yaw REAL,
+                m_pitch REAL,
+                m_roll REAL,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+	return;
+}
 function session(db) {
 	db.run(`CREATE TABLE IF NOT EXISTS sessions(m_weather INT,
         m_trackTemperature INT,
@@ -102,65 +150,6 @@ function marshalZones(db) {
 	return;
 }
 
-function weatherForecastSamples(db) {
-	db.run(`CREATE TABLE IF NOT EXISTS weatherForecastSamples(0 INT,
-                1 INT,
-                2 INT,
-                3 INT,
-                4 INT,
-                5 INT,
-                6 INT,
-                7 INT,
-                8 INT,
-                9 INT,
-                10 INT,
-                11 INT,
-                12 INT,
-                13 INT,
-                14 INT,
-                15 INT,
-                16 INT,
-                17 INT,
-                18 INT,
-                19 INT,
-                20 INT,
-                21 INT,
-                22 INT,
-                23 INT,
-                24 INT,
-                25 INT,
-                26 INT,
-                27 INT,
-                28 INT,
-                29 INT,
-                30 INT,
-                31 INT,
-                32 INT,
-                33 INT,
-                34 INT,
-                35 INT,
-                36 INT,
-                37 INT,
-                38 INT,
-                39 INT,
-                40 INT,
-                41 INT,
-                42 INT,
-                43 INT,
-                44 INT,
-                45 INT,
-                46 INT,
-                47 INT,
-                48 INT,
-                49 INT,
-                50 INT,
-                51 INT,
-                52 INT,
-                53 INT,
-                54 INT,
-                55 INT);`);
-	return;
-}
 export function createInsertSchema(obj, table, data, nameAddon = '') {
 	var s = '';
 	var ss = '';
@@ -168,11 +157,9 @@ export function createInsertSchema(obj, table, data, nameAddon = '') {
 	objToListOfNames(obj).forEach((element) => {
 		s += nameAddon + element + ', ';
 		ss += '?,';
-		schema += nameAddon + element + ' INT,\n';
+		schema += nameAddon + element + ' REAL,\n';
 	});
-	console.log(
-		`db.run('INSERT INTO ${table}(${s.slice(0, -2)}) VALUES (${ss.slice(0, -1)})',objToListOfValues(${data}));`
-	);
+	console.log(`db.run('INSERT INTO ${table} VALUES (${ss.slice(0, -1)})',objToListOfValues(${data}));`);
 	console.log(schema.slice(0, -2) + ');');
 }
 

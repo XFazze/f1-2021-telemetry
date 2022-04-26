@@ -4,12 +4,21 @@ exports.marshalZoneConvert = exports.objToListOfNames = exports.objToListOfValue
 var sqlite3 = require('sqlite3').verbose();
 function dbSetup() {
     var db = new sqlite3.Database('main.db');
+    motionData(db);
+    carMotionData(db);
     session(db);
     marshalZones(db);
-    console.log('wwo');
     return db;
 }
 exports.dbSetup = dbSetup;
+function motionData(db) {
+    db.run("CREATE TABLE IF NOT EXISTS motionData(m_header REAL,\n                m_suspensionPosition REAL,\n                m_suspensionVelocity REAL,\n                m_suspensionAcceleration REAL,\n                m_wheelSpeed REAL,\n                m_wheelSlip REAL,\n                m_localVelocityX REAL,\n                m_localVelocityY REAL,\n                m_localVelocityZ REAL,\n                m_angularVelocityX REAL,\n                m_angularVelocityY REAL,\n                m_angularVelocityZ REAL,\n                m_angularAccelerationX REAL,\n                m_angularAccelerationY REAL,\n                m_angularAccelerationZ REAL,\n                m_frontWheelsAngle REAL\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT);");
+    return;
+}
+function carMotionData(db) {
+    db.run("CREATE TABLE IF NOT EXISTS carMotionData(m_worldPositionX REAL,\n                m_worldPositionY REAL,\n                m_worldPositionZ REAL,\n                m_worldVelocityX REAL,\n                m_worldVelocityY REAL,\n                m_worldVelocityZ REAL,\n                m_worldForwardDirX INT,\n                m_worldForwardDirY INT,\n                m_worldForwardDirZ INT,\n                m_worldRightDirX INT,\n                m_worldRightDirY INT,\n                m_worldRightDirZ INT,\n                m_gForceLateral REAL,\n                m_gForceLongitudinal REAL,\n                m_gForceVertical REAL,\n                m_yaw REAL,\n                m_pitch REAL,\n                m_roll REAL,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
+    return;
+}
 function session(db) {
     db.run("CREATE TABLE IF NOT EXISTS sessions(m_weather INT,\n        m_trackTemperature INT,\n        m_airTemperature INT,\n        m_totalLaps INT,\n        m_trackLength INT,\n        m_sessionType INT,\n        m_trackId INT,\n        m_formula INT,\n        m_sessionTimeLeft INT,\n        m_sessionDuration INT,\n        m_pitSpeedLimit INT,\n        m_gamePaused INT,\n        m_isSpectating INT,\n        m_spectatorCarIndex INT,\n        m_sliProNativeSupport INT,\n        m_numMarshalZones INT,\n        m_safetyCarStatus INT,\n        m_networkGame INT,\n        m_numWeatherForecastSamples INT,\n        m_forecastAccuracy INT,\n        m_aiDifficulty INT,\n        m_seasonLinkIdentifier INT,\n        m_weekendLinkIdentifier INT,\n        m_sessionLinkIdentifier INT,\n        m_pitStopWindowIdealLap INT,\n        m_pitStopWindowLatestLap INT,\n        m_pitStopRejoinPosition INT,\n        m_steeringAssist INT,\n        m_brakingAssist INT,\n        m_gearboxAssist INT,\n        m_pitAssist INT,\n        m_pitReleaseAssist INT,\n        m_ERSAssist INT,\n        m_DRSAssist INT,\n        m_dynamicRacingLine INT,\n        m_dynamicRacingLineType INT,\n        m_sessionUID INT,\n        m_sessionTime REAL,\n        m_frameIdentifier INT);\n        ");
     return;
@@ -26,7 +35,7 @@ function createInsertSchema(obj, table, data, nameAddon) {
     objToListOfNames(obj).forEach(function (element) {
         s += nameAddon + element + ', ';
         ss += '?,';
-        schema += nameAddon + element + ' INT,\n';
+        schema += nameAddon + element + ' REAL,\n';
     });
     console.log("db.run('INSERT INTO ".concat(table, "(").concat(s.slice(0, -2), ") VALUES (").concat(ss.slice(0, -1), ")',objToListOfValues(").concat(data, "));"));
     console.log(schema.slice(0, -2) + ');');

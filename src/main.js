@@ -1,47 +1,64 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 exports.__esModule = true;
 var f1_2021_udp_1 = require("f1-2021-udp");
 var dbSetup_1 = require("./dbSetup");
 var fs = require('fs');
 var db = (0, dbSetup_1.dbSetup)();
 var client = new f1_2021_udp_1.F1TelemetryClient();
+// motion 0
+client.on('motion', function (data) {
+    var m_carMotionData = data['m_carMotionData'];
+    delete data['m_carMotionData'];
+    var m_header = data['m_header'];
+    delete data['m_header'];
+    data['m_sessionUID'] = m_header['m_sessionUID'];
+    data['m_sessionTime'] = m_header['m_sessionTime'];
+    data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+    console.log(data);
+    db.run('INSERT INTO motionData(m_header, m_suspensionPosition, m_suspensionVelocity, m_suspensionAcceleration, m_wheelSpeed, m_wheelSlip, m_localVelocityX, m_localVelocityY, m_localVelocityZ, m_angularVelocityX, m_angularVelocityY, m_angularVelocityZ, m_angularAccelerationX, m_angularAccelerationY, m_angularAccelerationZ, m_frontWheelsAngle, m_sessionUID, m_sessionTime, m_frameIdentifier) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(data));
+    for (var i = 0; i < m_carMotionData.length; i++) {
+        var car = m_carMotionData[i];
+        car['m_sessionUID'] = m_header['m_sessionUID'];
+        car['m_sessionTime'] = m_header['m_sessionTime'];
+        car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+        car['indexx'] = i;
+        db.run('INSERT INTO carMotionData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(car));
+    }
+    client.stop();
+});
+/*
 // session 1
 client.on('session', function (data) {
     var m_weatherForecastSamples = data['m_weatherForecastSamples'];
     delete data['m_weatherForecastSamples'];
+    // TODO add weatherForecastSamples
+    //createInsertSchema(m_weatherForecastSamples, 'weatherForecastSamples', 'm_weatherForecastSamples');
+
     var m_header = data['m_header'];
     delete data['m_header'];
-    var m_marshalZones = __spreadArray([
+    var m_marshalZones = [
         m_header['m_sessionUID'],
         m_header['m_sessionTime'],
-        m_header['m_frameIdentifier']
-    ], (0, dbSetup_1.marshalZoneConvert)(data['m_marshalZones']), true);
+        m_header['m_frameIdentifier'],
+        ...marshalZoneConvert(data['m_marshalZones']),
+    ];
     delete data['m_marshalZones'];
     console.log('ff', m_marshalZones);
+
     data['m_sessionUID'] = m_header['m_sessionUID'];
     data['m_sessionTime'] = m_header['m_sessionTime'];
     data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
-    //console.log(data);
-    db.run('INSERT INTO sessions(m_weather, m_trackTemperature, m_airTemperature, m_totalLaps, m_trackLength, m_sessionType, m_trackId, m_formula, m_sessionTimeLeft, m_sessionDuration, m_pitSpeedLimit, m_gamePaused, m_isSpectating, m_spectatorCarIndex, m_sliProNativeSupport, m_numMarshalZones, m_safetyCarStatus, m_networkGame, m_numWeatherForecastSamples, m_forecastAccuracy, m_aiDifficulty, m_seasonLinkIdentifier, m_weekendLinkIdentifier, m_sessionLinkIdentifier, m_pitStopWindowIdealLap, m_pitStopWindowLatestLap, m_pitStopRejoinPosition, m_steeringAssist, m_brakingAssist, m_gearboxAssist, m_pitAssist, m_pitReleaseAssist, m_ERSAssist, m_DRSAssist, m_dynamicRacingLine, m_dynamicRacingLineType, m_sessionUID, m_sessionTime, m_frameIdentifier) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(data));
-    db.run('INSERT INTO marshalZones(m_sessionUID, m_sessionTime, m_frameIdentifier, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20,mf0, mf1, mf2, mf3, mf4, mf5, mf6, mf7, mf8, mf9, mf10, mf11, mf12, mf13, mf14, mf15, mf16, mf17, mf18, mf19, mf20) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', m_marshalZones);
-    (0, dbSetup_1.createInsertSchema)(m_weatherForecastSamples, 'weatherForecastSamples', 'm_weatherForecastSamples');
+    db.run(
+        'INSERT INTO sessions(m_weather, m_trackTemperature, m_airTemperature, m_totalLaps, m_trackLength, m_sessionType, m_trackId, m_formula, m_sessionTimeLeft, m_sessionDuration, m_pitSpeedLimit, m_gamePaused, m_isSpectating, m_spectatorCarIndex, m_sliProNativeSupport, m_numMarshalZones, m_safetyCarStatus, m_networkGame, m_numWeatherForecastSamples, m_forecastAccuracy, m_aiDifficulty, m_seasonLinkIdentifier, m_weekendLinkIdentifier, m_sessionLinkIdentifier, m_pitStopWindowIdealLap, m_pitStopWindowLatestLap, m_pitStopRejoinPosition, m_steeringAssist, m_brakingAssist, m_gearboxAssist, m_pitAssist, m_pitReleaseAssist, m_ERSAssist, m_DRSAssist, m_dynamicRacingLine, m_dynamicRacingLineType, m_sessionUID, m_sessionTime, m_frameIdentifier) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        objToListOfValues(data)
+    );
+    db.run(
+        'INSERT INTO marshalZones(m_sessionUID, m_sessionTime, m_frameIdentifier, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20,mf0, mf1, mf2, mf3, mf4, mf5, mf6, mf7, mf8, mf9, mf10, mf11, mf12, mf13, mf14, mf15, mf16, mf17, mf18, mf19, mf20) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        m_marshalZones
+    );
+
     client.stop();
 });
-/*
-// motion 0
-client.on('motion', function (data) {
-    console.log(data);
-});
-
 // lap data 2
 client.on('lapData', function (data) {
     console.log(data);
