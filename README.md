@@ -4,10 +4,26 @@ Using [raweceek's library](https://github.com/raweceek-temeletry/f1-2021-udp 'Gi
 
 ## Goals
 
-1. Save packets
+### Big
+
+1. Save packets(mostly done)
 1. Analyze/show packets
 
+### Small
+
+1. Show windows application
+1. Multiple windows
+1. Multiple proccesses
+1. Graphs
+
+## Showing packets
+
+### node-gui
+
 ## Saving packets
+
+Sqlite
+https://www.npmjs.com/package/sqlite3
 
 ### 0 Motion [x]
 
@@ -19,18 +35,18 @@ Using [raweceek's library](https://github.com/raweceek-temeletry/f1-2021-udp 'Gi
 
 ### 4 Participants [x]
 
-### 5 Car Setups [ ]
+### 5 Car Setups [x]
 
-In progress
+### 6 Car Telemetry [x]
 
-### 6 Car Telemetry [ ]
-
-### 7 Car Status [ ]
+### 7 Car Status [x]
 
 ### 8 Final Classification [ ]
 
-### 9 Lobby Info [ ]
+TODO End of race telemetry
 
-### 10 Car Damage [ ]
+### 9 Lobby Info [x]
 
-### 11 Session History [ ]
+### 10 Car Damage [x]
+
+### 11 Session History [x]
