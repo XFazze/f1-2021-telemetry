@@ -1,13 +1,24 @@
 {
   "dependencies": {
-    "csv-append": "^1.0.0",
+    "@nodegui/nodegui": "^0.50.0",
+    "@nodegui/svelte-nodegui": "^0.1.2",
     "f1-2021-udp": "^1.12.12",
     "mongodb": "^4.5.0",
-    "objects-to-csv": "^1.3.6",
-    "sqlite-ts": "^0.1.0",
     "sqlite3": "^5.0.5"
   },
   "scripts": {
-    "dev": "tsc .\\main.ts && node .\\main.js"
+    "data": "tsc .\\main.ts && node .\\main.js",
+    "start": "webpack && qode ./dist/index.js"
+  },
+  "devDependencies": {
+    "@nodegui/packer": "^1.4.1",
+    "@types/node": "^16.4.13",
+    "clean-webpack-plugin": "^3.0.0",
+    "file-loader": "^6.2.0",
+    "native-addon-loader": "^2.0.1",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.3.5",
+    "webpack": "^5.49.0",
+    "webpack-cli": "^4.9.2"
   }
 }

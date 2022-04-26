@@ -15,10 +15,13 @@ Using [raweceek's library](https://github.com/raweceek-temeletry/f1-2021-udp 'Gi
 1. Multiple windows
 1. Multiple proccesses
 1. Graphs
+1. Designs/sketches
 
 ## Showing packets
 
 ### node-gui
+
+https://docs.nodegui.org/docs/api/manual/synopsis
 
 ## Saving packets
 
