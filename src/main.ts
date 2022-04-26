@@ -19,10 +19,6 @@ client.on('finalClassification', function (data) {
 	console.log(data);
 });
 
-// lobby info 9
-client.on('lobbyInfo', function (data) {
-	console.log(data);
-});
 
 
 // motion 0
@@ -173,6 +169,30 @@ client.on('carStatus', function (data) {
 			objToListOfValues(car)
 		);
 	}
+	client.stop();
+});
+
+// lobby info 9
+client.on('lobbyInfo', function (data) {
+	var m_header = data['m_header'];
+	delete data['m_header'];
+	data['m_sessionUID'] = m_header['m_sessionUID'];
+	data['m_sessionTime'] = m_header['m_sessionTime'];
+	data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+
+	var m_lobbyPlayers = data['m_lobbyPlayers'];
+	delete data['m_lobbyPlayers'];
+
+	for (let i = 0; i < m_lobbyPlayers.length; i++) {
+		const player = m_lobbyPlayers[i];
+		player['m_sessionUID'] = m_header['m_sessionUID'];
+		player['m_sessionTime'] = m_header['m_sessionTime'];
+		player['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+		player['indexx'] = i;
+		db.run('INSERT INTO lobbyPlayerInfo VALUES (?,?,?,?,?,?,?,?,?,?)', objToListOfValues(player));
+	}
+
+	db.run('INSERT INTO lobbyInfo VALUES (?,?,?,?)', objToListOfValues(data));
 	client.stop();
 });
 // car damage 10

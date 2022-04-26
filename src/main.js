@@ -5,33 +5,24 @@ var dbSetup_1 = require("./dbSetup");
 var fs = require('fs');
 var db = (0, dbSetup_1.dbSetup)();
 var client = new f1_2021_udp_1.F1TelemetryClient();
-// session history 11
-client.on('sessionHistory', function (data) {
+// lobby info 9
+client.on('lobbyInfo', function (data) {
     var m_header = data['m_header'];
     delete data['m_header'];
     data['m_sessionUID'] = m_header['m_sessionUID'];
     data['m_sessionTime'] = m_header['m_sessionTime'];
     data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
-    var m_lapHistoryData = data['m_lapHistoryData'];
-    delete data['m_lapHistoryData'];
-    var m_tyreStintsHistoryData = data['m_tyreStintsHistoryData'];
-    delete data['m_tyreStintsHistoryData'];
-    for (var i = 0; i < m_lapHistoryData.length; i++) {
-        var lap = m_lapHistoryData[i];
-        lap['m_sessionUID'] = m_header['m_sessionUID'];
-        lap['m_sessionTime'] = m_header['m_sessionTime'];
-        lap['m_frameIdentifier'] = m_header['m_frameIdentifier'];
-        lap['indexx'] = i;
-        db.run('INSERT INTO lapHistory VALUES (?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(lap));
+    var m_lobbyPlayers = data['m_lobbyPlayers'];
+    delete data['m_lobbyPlayers'];
+    for (var i = 0; i < m_lobbyPlayers.length; i++) {
+        var player = m_lobbyPlayers[i];
+        player['m_sessionUID'] = m_header['m_sessionUID'];
+        player['m_sessionTime'] = m_header['m_sessionTime'];
+        player['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+        player['indexx'] = i;
+        db.run('INSERT INTO lobbyPlayerInfo VALUES (?,?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(player));
     }
-    for (var i = 0; i < m_tyreStintsHistoryData.length; i++) {
-        var lap = m_tyreStintsHistoryData[i];
-        lap['m_sessionUID'] = m_header['m_sessionUID'];
-        lap['m_sessionTime'] = m_header['m_sessionTime'];
-        lap['m_frameIdentifier'] = m_header['m_frameIdentifier'];
-        lap['indexx'] = i;
-        db.run('INSERT INTO tyreStintHistory VALUES (?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(lap));
-    }
+    db.run('INSERT INTO lobbyInfo VALUES (?,?,?,?)', (0, dbSetup_1.objToListOfValues)(data));
     client.stop();
 });
 /*
@@ -47,10 +38,6 @@ client.on('finalClassification', function (data) {
     console.log(data);
 });
 
-// lobby info 9
-client.on('lobbyInfo', function (data) {
-    console.log(data);
-});
 
 
 // motion 0
@@ -220,6 +207,37 @@ client.on('carDamage', function (data) {
         db.run('INSERT INTO carDamage VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
     }
     client.stop();
+});// session history 11
+client.on('sessionHistory', function (data) {
+    var m_header = data['m_header'];
+    delete data['m_header'];
+    data['m_sessionUID'] = m_header['m_sessionUID'];
+    data['m_sessionTime'] = m_header['m_sessionTime'];
+    data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+
+    var m_lapHistoryData = data['m_lapHistoryData'];
+    delete data['m_lapHistoryData'];
+
+    var m_tyreStintsHistoryData = data['m_tyreStintsHistoryData'];
+    delete data['m_tyreStintsHistoryData'];
+
+    for (let i = 0; i < m_lapHistoryData.length; i++) {
+        const lap = m_lapHistoryData[i];
+        lap['m_sessionUID'] = m_header['m_sessionUID'];
+        lap['m_sessionTime'] = m_header['m_sessionTime'];
+        lap['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+        lap['indexx'] = i;
+        db.run('INSERT INTO lapHistory VALUES (?,?,?,?,?,?,?,?,?)', objToListOfValues(lap));
+    }
+
+    for (let i = 0; i < m_tyreStintsHistoryData.length; i++) {
+        const lap = m_tyreStintsHistoryData[i];
+        lap['m_sessionUID'] = m_header['m_sessionUID'];
+        lap['m_sessionTime'] = m_header['m_sessionTime'];
+        lap['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+        lap['indexx'] = i;
+        db.run('INSERT INTO tyreStintHistory VALUES (?,?,?,?,?,?,?)', objToListOfValues(lap));
+    }
 });
 
 */

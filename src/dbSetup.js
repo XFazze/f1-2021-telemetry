@@ -15,6 +15,8 @@ function dbSetup() {
     telemetryData(db);
     cartelemetryData(db);
     carStatus(db);
+    lobbyInfo(db);
+    lobbyPlayerInfo(db);
     carDamage(db);
     sessionHistory(db);
     lapHistory(db);
@@ -22,6 +24,13 @@ function dbSetup() {
     return db;
 }
 exports.dbSetup = dbSetup;
+function lobbyPlayerInfo(db) {
+    db.run("CREATE TABLE IF NOT EXISTS lobbyPlayerInfo(m_aiControlled INT,\n                m_teamId INT,\n                m_nationality INT,\n                m_name TEXT,\n                m_carNumber INT,\n                m_readyStatus INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
+}
+function lobbyInfo(db) {
+    db.run("CREATE TABLE IF NOT EXISTS lobbyInfo(m_numPlayers INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT);");
+    return;
+}
 function tyreStintHistory(db) {
     db.run("CREATE TABLE IF NOT EXISTS tyreStintHistory(m_endLap INT,\n                m_tyreActualCompound INT,\n                m_tyreVisualCompound INT,\n                indexx INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT);");
     return;

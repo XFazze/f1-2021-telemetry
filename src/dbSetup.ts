@@ -20,12 +20,34 @@ export function dbSetup() {
 
 	carStatus(db);
 
+	lobbyInfo(db);
+	lobbyPlayerInfo(db);
+
 	carDamage(db);
 
 	sessionHistory(db);
 	lapHistory(db);
 	tyreStintHistory(db);
 	return db;
+}
+function lobbyPlayerInfo(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS lobbyPlayerInfo(m_aiControlled INT,
+                m_teamId INT,
+                m_nationality INT,
+                m_name TEXT,
+                m_carNumber INT,
+                m_readyStatus INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+}
+function lobbyInfo(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS lobbyInfo(m_numPlayers INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT);`);
+	return;
 }
 function tyreStintHistory(db) {
 	db.run(`CREATE TABLE IF NOT EXISTS tyreStintHistory(m_endLap INT,
