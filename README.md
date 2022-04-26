@@ -13,15 +13,15 @@ Using [raweceek's library](https://github.com/raweceek-temeletry/f1-2021-udp 'Gi
 
 ### 1 Session [x]
 
-### 2 Lap Data [ ]
-
-In progress
+### 2 Lap Data [x]
 
 ### 3 Event [ ]
 
-### 4 Participants [ ]
+### 4 Participants [x]
 
 ### 5 Car Setups [ ]
+
+In progress
 
 ### 6 Car Telemetry [ ]
 

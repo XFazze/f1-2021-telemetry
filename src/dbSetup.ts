@@ -8,7 +8,66 @@ export function dbSetup() {
 	session(db);
 	marshalZones(db);
 
+	lapData(db);
+
+	participantData(db);
+	carParticipantData(db);
+
 	return db;
+}
+function carParticipantData(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS carParticipantsData(m_aiControlled INT,
+                m_driverId INT,
+                m_networkId INT,
+                m_teamId INT,
+                m_myTeam INT,
+                m_raceNumber INT,
+                m_nationality INT,
+                m_name TEXT,
+                m_yourTelemetry INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+	return;
+}
+function participantData(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS participantsData(m_numActiveCars INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT);`);
+	return;
+}
+function lapData(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS lapData(m_lastLapTimeInMS INT,
+                m_currentLapTimeInMS INT,
+                m_sector1TimeInMS INT,
+                m_sector2TimeInMS INT,
+                m_lapDistance REAL,
+                m_totalDistance REAL,
+                m_safetyCarDelta REAL,
+                m_carPosition INT,
+                m_currentLapNum INT,
+                m_pitStatus INT,
+                m_numPitStops INT,
+                m_sector INT,
+                m_currentLapInvalid INT,
+                m_penalties INT,
+                m_warnings INT,
+                m_numUnservedDriveThroughPens INT,
+                m_numUnservedStopGoPens INT,
+                m_gridPosition INT,
+                m_driverStatus INT,
+                m_resultStatus INT,
+                m_pitLaneTimerActive INT,
+                m_pitLaneTimeInLaneInMS INT,
+                m_pitStopTimerInMS INT,
+                m_pitStopShouldServePen INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+	return;
 }
 function motionData(db) {
 	db.run(`CREATE TABLE IF NOT EXISTS motionData(m_header REAL,
@@ -157,7 +216,7 @@ export function createInsertSchema(obj, table, data, nameAddon = '') {
 	objToListOfNames(obj).forEach((element) => {
 		s += nameAddon + element + ', ';
 		ss += '?,';
-		schema += nameAddon + element + ' REAL,\n';
+		schema += nameAddon + element + ' INT,\n';
 	});
 	console.log(`db.run('INSERT INTO ${table} VALUES (${ss.slice(0, -1)})',objToListOfValues(${data}));`);
 	console.log(schema.slice(0, -2) + ');');

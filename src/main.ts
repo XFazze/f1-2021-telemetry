@@ -5,6 +5,8 @@ const fs = require('fs');
 const db = dbSetup();
 
 const client: F1TelemetryClient = new F1TelemetryClient();
+
+/*
 // motion 0
 client.on('motion', function (data) {
 	var m_carMotionData = data['m_carMotionData'];
@@ -25,9 +27,7 @@ client.on('motion', function (data) {
 		car['indexx'] = i;
 		db.run('INSERT INTO carMotionData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
 	}
-	client.stop();
 });
-/*
 // session 1
 client.on('session', function (data) {
 	var m_weatherForecastSamples = data['m_weatherForecastSamples'];
@@ -58,22 +58,49 @@ client.on('session', function (data) {
 		m_marshalZones
 	);
 
-	client.stop();
-});
-// lap data 2
-client.on('lapData', function (data) {
-	console.log(data);
 });
 
+// lap data 2
+client.on('lapData', function (data) {
+	var m_header = data['m_header'];
+	for (let i = 0; i < data['m_lapData'].length; i++) {
+		const car = data['m_lapData'][i];
+		car['m_sessionUID'] = m_header['m_sessionUID'];
+		car['m_sessionTime'] = m_header['m_sessionTime'];
+		car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+		car['indexx'] = i;
+		db.run(
+			'INSERT INTO lapData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+			objToListOfValues(car)
+		);
+	}
+});
 // event 3
 client.on('event', function (data) {
 	console.log(data);
 });
-
 // participants 4
 client.on('participants', function (data) {
-	console.log(data);
+	var m_participants = data['m_participants'];
+	delete data['m_participants'];
+
+	var m_header = data['m_header'];
+	delete data['m_header'];
+	data['m_sessionUID'] = m_header['m_sessionUID'];
+	data['m_sessionTime'] = m_header['m_sessionTime'];
+	data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+
+	db.run('INSERT INTO participantsData VALUES (?,?,?,?)', objToListOfValues(data));
+	for (let i = 0; i < m_participants.length; i++) {
+		const car = m_participants[i];
+		car['m_sessionUID'] = m_header['m_sessionUID'];
+		car['m_sessionTime'] = m_header['m_sessionTime'];
+		car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+		car['indexx'] = i;
+		db.run('INSERT INTO carParticipantsData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
+	}
 });
+
 
 // car setup 5
 client.on('carSetups', function (data) {
@@ -112,9 +139,5 @@ client.on('sessionHistory', function (data) {
 */
 
 // to start listening:
-
-//async () => {
-//	await end();
-//};
 
 client.start();

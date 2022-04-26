@@ -8,9 +8,24 @@ function dbSetup() {
     carMotionData(db);
     session(db);
     marshalZones(db);
+    lapData(db);
+    participantData(db);
+    carParticipantData(db);
     return db;
 }
 exports.dbSetup = dbSetup;
+function carParticipantData(db) {
+    db.run("CREATE TABLE IF NOT EXISTS carParticipantsData(m_aiControlled INT,\n                m_driverId INT,\n                m_networkId INT,\n                m_teamId INT,\n                m_myTeam INT,\n                m_raceNumber INT,\n                m_nationality INT,\n                m_name TEXT,\n                m_yourTelemetry INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
+    return;
+}
+function participantData(db) {
+    db.run("CREATE TABLE IF NOT EXISTS participantsData(m_numActiveCars INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT);");
+    return;
+}
+function lapData(db) {
+    db.run("CREATE TABLE IF NOT EXISTS lapData(m_lastLapTimeInMS INT,\n                m_currentLapTimeInMS INT,\n                m_sector1TimeInMS INT,\n                m_sector2TimeInMS INT,\n                m_lapDistance REAL,\n                m_totalDistance REAL,\n                m_safetyCarDelta REAL,\n                m_carPosition INT,\n                m_currentLapNum INT,\n                m_pitStatus INT,\n                m_numPitStops INT,\n                m_sector INT,\n                m_currentLapInvalid INT,\n                m_penalties INT,\n                m_warnings INT,\n                m_numUnservedDriveThroughPens INT,\n                m_numUnservedStopGoPens INT,\n                m_gridPosition INT,\n                m_driverStatus INT,\n                m_resultStatus INT,\n                m_pitLaneTimerActive INT,\n                m_pitLaneTimeInLaneInMS INT,\n                m_pitStopTimerInMS INT,\n                m_pitStopShouldServePen INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
+    return;
+}
 function motionData(db) {
     db.run("CREATE TABLE IF NOT EXISTS motionData(m_header REAL,\n                m_suspensionPosition REAL,\n                m_suspensionVelocity REAL,\n                m_suspensionAcceleration REAL,\n                m_wheelSpeed REAL,\n                m_wheelSlip REAL,\n                m_localVelocityX REAL,\n                m_localVelocityY REAL,\n                m_localVelocityZ REAL,\n                m_angularVelocityX REAL,\n                m_angularVelocityY REAL,\n                m_angularVelocityZ REAL,\n                m_angularAccelerationX REAL,\n                m_angularAccelerationY REAL,\n                m_angularAccelerationZ REAL,\n                m_frontWheelsAngle REAL\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT);");
     return;
@@ -35,9 +50,9 @@ function createInsertSchema(obj, table, data, nameAddon) {
     objToListOfNames(obj).forEach(function (element) {
         s += nameAddon + element + ', ';
         ss += '?,';
-        schema += nameAddon + element + ' REAL,\n';
+        schema += nameAddon + element + ' INT,\n';
     });
-    console.log("db.run('INSERT INTO ".concat(table, "(").concat(s.slice(0, -2), ") VALUES (").concat(ss.slice(0, -1), ")',objToListOfValues(").concat(data, "));"));
+    console.log("db.run('INSERT INTO ".concat(table, " VALUES (").concat(ss.slice(0, -1), ")',objToListOfValues(").concat(data, "));"));
     console.log(schema.slice(0, -2) + ');');
 }
 exports.createInsertSchema = createInsertSchema;
