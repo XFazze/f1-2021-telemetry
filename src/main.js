@@ -5,18 +5,23 @@ var dbSetup_1 = require("./dbSetup");
 var fs = require('fs');
 var db = (0, dbSetup_1.dbSetup)();
 var client = new f1_2021_udp_1.F1TelemetryClient();
-// car setup 5
-client.on('carSetups', function (data) {
+// car telemetry 6
+client.on('carTelemetry', function (data) {
     var m_header = data['m_header'];
     delete data['m_header'];
-    var m_carSetups = data['m_carSetups'];
-    for (var i = 0; i < m_carSetups.length; i++) {
-        var car = m_carSetups[i];
+    data['m_sessionUID'] = m_header['m_sessionUID'];
+    data['m_sessionTime'] = m_header['m_sessionTime'];
+    data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+    var m_carTelemetryData = data['m_carTelemetryData'];
+    delete data['m_carTelemetryData'];
+    db.run('INSERT INTO telemetry VALUES (?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(data));
+    for (var i = 0; i < m_carTelemetryData.length; i++) {
+        var car = m_carTelemetryData[i];
         car['m_sessionUID'] = m_header['m_sessionUID'];
         car['m_sessionTime'] = m_header['m_sessionTime'];
         car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
         car['indexx'] = i;
-        db.run('INSERT INTO carSetupData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(car));
+        db.run('INSERT INTO carTelemetry VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (0, dbSetup_1.objToListOfValues)(car));
     }
     client.stop();
 });
@@ -26,10 +31,6 @@ client.on('event', function (data) {
     console.log(data);
 });
 
-// car telemetry 6
-client.on('carTelemetry', function (data) {
-    console.log(data);
-});
 
 // car status 7
 client.on('carStatus', function (data) {
@@ -66,14 +67,14 @@ client.on('motion', function (data) {
     data['m_sessionTime'] = m_header['m_sessionTime'];
     data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
 
-    db.run('INSERT INTO motionData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(data));
+    db.run('INSERT INTO motion VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(data));
     for (let i = 0; i < m_carMotionData.length; i++) {
         const car = m_carMotionData[i];
         car['m_sessionUID'] = m_header['m_sessionUID'];
         car['m_sessionTime'] = m_header['m_sessionTime'];
         car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
         car['indexx'] = i;
-        db.run('INSERT INTO carMotionData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
+        db.run('INSERT INTO carMotion VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
     }
 });
 // session 1
@@ -118,7 +119,7 @@ client.on('lapData', function (data) {
         car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
         car['indexx'] = i;
         db.run(
-            'INSERT INTO lapData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+            'INSERT INTO lap VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
             objToListOfValues(car)
         );
     }
@@ -134,17 +135,35 @@ client.on('participants', function (data) {
     data['m_sessionTime'] = m_header['m_sessionTime'];
     data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
 
-    db.run('INSERT INTO participantsData VALUES (?,?,?,?)', objToListOfValues(data));
+    db.run('INSERT INTO participants VALUES (?,?,?,?)', objToListOfValues(data));
     for (let i = 0; i < m_participants.length; i++) {
         const car = m_participants[i];
         car['m_sessionUID'] = m_header['m_sessionUID'];
         car['m_sessionTime'] = m_header['m_sessionTime'];
         car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
         car['indexx'] = i;
-        db.run('INSERT INTO carParticipantsData VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
+        db.run('INSERT INTO carParticipants VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
     }
 });
 
+// car setup 5
+client.on('carSetups', function (data) {
+    var m_header = data['m_header'];
+    delete data['m_header'];
+    var m_carSetups = data['m_carSetups'];
+    for (let i = 0; i < m_carSetups.length; i++) {
+        const car = m_carSetups[i];
+        car['m_sessionUID'] = m_header['m_sessionUID'];
+        car['m_sessionTime'] = m_header['m_sessionTime'];
+        car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+        car['indexx'] = i;
+        db.run(
+            'INSERT INTO carSetup VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+            objToListOfValues(car)
+        );
+    }
+    client.stop();
+});
 
 */
 // to start listening:

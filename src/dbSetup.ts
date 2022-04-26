@@ -15,9 +15,42 @@ export function dbSetup() {
 
 	carSetupData(db);
 
+	telemetryData(db);
+	cartelemetryData(db);
 	return db;
 }
-
+function telemetryData(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS carTelemetry(m_speed INT,
+                m_throttle REAL,
+                m_steer REAL,
+                m_brake REAL,
+                m_clutch INT,
+                m_gear INT,
+                m_engineRPM INT,
+                m_drs INT,
+                m_revLightsPercent INT,
+                m_revLightsBitValue INT,
+                m_brakesTemperature INT,
+                m_tyresSurfaceTemperature INT,
+                m_tyresInnerTemperature INT,
+                m_engineTemperature INT,
+                m_tyresPressure REAL,
+                m_surfaceType INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+	return;
+}
+function cartelemetryData(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS telemetry(m_mfdPanelIndex INT,
+                m_mfdPanelIndexSecondaryPlayer INT,
+                m_suggestedGear INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT);`);
+	return;
+}
 function carSetupData(db) {
 	db.run(`CREATE TABLE IF NOT EXISTS carSetupData(m_frontWing INT,
                 m_rearWing INT,
@@ -48,7 +81,7 @@ function carSetupData(db) {
 	return;
 }
 function carParticipantData(db) {
-	db.run(`CREATE TABLE IF NOT EXISTS carParticipantsData(m_aiControlled INT,
+	db.run(`CREATE TABLE IF NOT EXISTS carParticipants(m_aiControlled INT,
                 m_driverId INT,
                 m_networkId INT,
                 m_teamId INT,
@@ -64,14 +97,14 @@ function carParticipantData(db) {
 	return;
 }
 function participantData(db) {
-	db.run(`CREATE TABLE IF NOT EXISTS participantsData(m_numActiveCars INT,
+	db.run(`CREATE TABLE IF NOT EXISTS participants(m_numActiveCars INT,
                 m_sessionUID INT,
                 m_sessionTime REAL,
                 m_frameIdentifier INT);`);
 	return;
 }
 function lapData(db) {
-	db.run(`CREATE TABLE IF NOT EXISTS lapData(m_lastLapTimeInMS INT,
+	db.run(`CREATE TABLE IF NOT EXISTS lap(m_lastLapTimeInMS INT,
                 m_currentLapTimeInMS INT,
                 m_sector1TimeInMS INT,
                 m_sector2TimeInMS INT,
@@ -102,7 +135,7 @@ function lapData(db) {
 	return;
 }
 function motionData(db) {
-	db.run(`CREATE TABLE IF NOT EXISTS motionData(m_header REAL,
+	db.run(`CREATE TABLE IF NOT EXISTS motion(m_header REAL,
                 m_suspensionPosition REAL,
                 m_suspensionVelocity REAL,
                 m_suspensionAcceleration REAL,
@@ -124,7 +157,7 @@ function motionData(db) {
 	return;
 }
 function carMotionData(db) {
-	db.run(`CREATE TABLE IF NOT EXISTS carMotionData(m_worldPositionX REAL,
+	db.run(`CREATE TABLE IF NOT EXISTS carMotion(m_worldPositionX REAL,
                 m_worldPositionY REAL,
                 m_worldPositionZ REAL,
                 m_worldVelocityX REAL,
