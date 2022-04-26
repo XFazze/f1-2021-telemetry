@@ -17,7 +17,40 @@ export function dbSetup() {
 
 	telemetryData(db);
 	cartelemetryData(db);
+
+	carStatus(db);
 	return db;
+}
+
+function carStatus(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS carStatus(m_tractionControl INT,
+                m_antiLockBrakes INT,
+                m_fuelMix INT,
+                m_frontBrakeBias INT,
+                m_pitLimiterStatus INT,
+                m_fuelInTank REAL,
+                m_fuelCapacity REAL,
+                m_fuelRemainingLaps REAL,
+                m_maxRPM INT,
+                m_idleRPM INT,
+                m_maxGears INT,
+                m_drsAllowed INT,
+                m_drsActivationDistance INT,
+                m_actualTyreCompound INT,
+                m_visualTyreCompound INT,
+                m_tyresAgeLaps INT,
+                m_vehicleFiaFlags INT,
+                m_ersStoreEnergy REAL,
+                m_ersDeployMode INT,
+                m_ersHarvestedThisLapMGUK REAL,
+                m_ersHarvestedThisLapMGUH REAL,
+                m_ersDeployedThisLap REAL,
+                m_networkPaused INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+	return;
 }
 function telemetryData(db) {
 	db.run(`CREATE TABLE IF NOT EXISTS carTelemetry(m_speed INT,

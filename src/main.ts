@@ -6,27 +6,26 @@ const db = dbSetup();
 
 const client: F1TelemetryClient = new F1TelemetryClient();
 
-// car telemetry 6
-client.on('carTelemetry', function (data) {
+// car status 7
+client.on('carStatus', function (data) {
 	var m_header = data['m_header'];
 	delete data['m_header'];
-	data['m_sessionUID'] = m_header['m_sessionUID'];
-	data['m_sessionTime'] = m_header['m_sessionTime'];
-	data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
 
-	var m_carTelemetryData = data['m_carTelemetryData'];
-	delete data['m_carTelemetryData'];
+	var m_carStatusData = data['m_carStatusData'];
+	delete data['m_carStatusData'];
 
-	db.run('INSERT INTO telemetry VALUES (?,?,?,?,?,?)', objToListOfValues(data));
-
-	for (let i = 0; i < m_carTelemetryData.length; i++) {
-		const car = m_carTelemetryData[i];
+	for (let i = 0; i < m_carStatusData.length; i++) {
+		const car = m_carStatusData[i];
 		car['m_sessionUID'] = m_header['m_sessionUID'];
 		car['m_sessionTime'] = m_header['m_sessionTime'];
 		car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
 		car['indexx'] = i;
-		db.run('INSERT INTO carTelemetry VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
+		db.run(
+			'INSERT INTO carStatus VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+			objToListOfValues(car)
+		);
 	}
+	client.stop();
 });
 /*
 // event 3
@@ -35,10 +34,6 @@ client.on('event', function (data) {
 });
 
 
-// car status 7
-client.on('carStatus', function (data) {
-	console.log(data);
-});
 
 // final classification 8
 client.on('finalClassification', function (data) {
@@ -165,7 +160,28 @@ client.on('carSetups', function (data) {
 			objToListOfValues(car)
 		);
 	}
-	client.stop();
+});
+// car telemetry 6
+client.on('carTelemetry', function (data) {
+	var m_header = data['m_header'];
+	delete data['m_header'];
+	data['m_sessionUID'] = m_header['m_sessionUID'];
+	data['m_sessionTime'] = m_header['m_sessionTime'];
+	data['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+
+	var m_carTelemetryData = data['m_carTelemetryData'];
+	delete data['m_carTelemetryData'];
+
+	db.run('INSERT INTO telemetry VALUES (?,?,?,?,?,?)', objToListOfValues(data));
+
+	for (let i = 0; i < m_carTelemetryData.length; i++) {
+		const car = m_carTelemetryData[i];
+		car['m_sessionUID'] = m_header['m_sessionUID'];
+		car['m_sessionTime'] = m_header['m_sessionTime'];
+		car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
+		car['indexx'] = i;
+		db.run('INSERT INTO carTelemetry VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
+	}
 });
 
 */

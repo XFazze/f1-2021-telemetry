@@ -14,9 +14,14 @@ function dbSetup() {
     carSetupData(db);
     telemetryData(db);
     cartelemetryData(db);
+    carStatus(db);
     return db;
 }
 exports.dbSetup = dbSetup;
+function carStatus(db) {
+    db.run("CREATE TABLE IF NOT EXISTS carStatus(m_tractionControl INT,\n                m_antiLockBrakes INT,\n                m_fuelMix INT,\n                m_frontBrakeBias INT,\n                m_pitLimiterStatus INT,\n                m_fuelInTank INT,\n                m_fuelCapacity INT,\n                m_fuelRemainingLaps INT,\n                m_maxRPM INT,\n                m_idleRPM INT,\n                m_maxGears INT,\n                m_drsAllowed INT,\n                m_drsActivationDistance INT,\n                m_actualTyreCompound INT,\n                m_visualTyreCompound INT,\n                m_tyresAgeLaps INT,\n                m_vehicleFiaFlags INT,\n                m_ersStoreEnergy INT,\n                m_ersDeployMode INT,\n                m_ersHarvestedThisLapMGUK INT,\n                m_ersHarvestedThisLapMGUH INT,\n                m_ersDeployedThisLap INT,\n                m_networkPaused INT,\n                m_sessionUID INT,\n                m_sessionTime INT,\n                m_frameIdentifier INT,\n                indexx INT);");
+    return;
+}
 function telemetryData(db) {
     db.run("CREATE TABLE IF NOT EXISTS carTelemetry(m_speed INT,\n                m_throttle REAL,\n                m_steer REAL,\n                m_brake REAL,\n                m_clutch INT,\n                m_gear INT,\n                m_engineRPM INT,\n                m_drs INT,\n                m_revLightsPercent INT,\n                m_revLightsBitValue INT,\n                m_brakesTemperature INT,\n                m_tyresSurfaceTemperature INT,\n                m_tyresInnerTemperature INT,\n                m_engineTemperature INT,\n                m_tyresPressure REAL,\n                m_surfaceType INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
     return;
