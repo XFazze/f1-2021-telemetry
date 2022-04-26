@@ -16,9 +16,24 @@ function dbSetup() {
     cartelemetryData(db);
     carStatus(db);
     carDamage(db);
+    sessionHistory(db);
+    lapHistory(db);
+    tyreStintHistory(db);
     return db;
 }
 exports.dbSetup = dbSetup;
+function tyreStintHistory(db) {
+    db.run("CREATE TABLE IF NOT EXISTS tyreStintHistory(m_endLap INT,\n                m_tyreActualCompound INT,\n                m_tyreVisualCompound INT,\n                indexx INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT);");
+    return;
+}
+function lapHistory(db) {
+    db.run("CREATE TABLE IF NOT EXISTS lapHistory(m_lapTimeInMS INT,\n                m_sector1TimeInMS INT,\n                m_sector2TimeInMS INT,\n                m_sector3TimeInMS INT,\n                m_lapValidBitFlags INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
+    return;
+}
+function sessionHistory(db) {
+    db.run("CREATE TABLE IF NOT EXISTS sessionHistory(m_carIdx INT,\n                m_numLaps INT,\n                m_numTyreStints INT,\n                m_bestLapTimeLapNum INT,\n                m_bestSector1LapNum INT,\n                m_bestSector2LapNum INT,\n                m_bestSector3LapNum INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT);");
+    return;
+}
 function carDamage(db) {
     db.run("CREATE TABLE IF NOT EXISTS carDamage(m_tyresWear REAL,\n                m_tyresDamage INT,\n                m_brakesDamage INT,\n                m_frontLeftWingDamage INT,\n                m_frontRightWingDamage INT,\n                m_rearWingDamage INT,\n                m_floorDamage INT,\n                m_diffuserDamage INT,\n                m_sidepodDamage INT,\n                m_drsFault INT,\n                m_gearBoxDamage INT,\n                m_engineDamage INT,\n                m_engineMGUHWear INT,\n                m_engineESWear INT,\n                m_engineCEWear INT,\n                m_engineICEWear INT,\n                m_engineMGUKWear INT,\n                m_engineTCWear INT,\n                m_sessionUID INT,\n                m_sessionTime REAL,\n                m_frameIdentifier INT,\n                indexx INT);");
     return;

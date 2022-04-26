@@ -21,7 +21,46 @@ export function dbSetup() {
 	carStatus(db);
 
 	carDamage(db);
+
+	sessionHistory(db);
+	lapHistory(db);
+	tyreStintHistory(db);
 	return db;
+}
+function tyreStintHistory(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS tyreStintHistory(m_endLap INT,
+                m_tyreActualCompound INT,
+                m_tyreVisualCompound INT,
+                indexx INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT);`);
+	return;
+}
+function lapHistory(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS lapHistory(m_lapTimeInMS INT,
+                m_sector1TimeInMS INT,
+                m_sector2TimeInMS INT,
+                m_sector3TimeInMS INT,
+                m_lapValidBitFlags INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT,
+                indexx INT);`);
+	return;
+}
+function sessionHistory(db) {
+	db.run(`CREATE TABLE IF NOT EXISTS sessionHistory(m_carIdx INT,
+                m_numLaps INT,
+                m_numTyreStints INT,
+                m_bestLapTimeLapNum INT,
+                m_bestSector1LapNum INT,
+                m_bestSector2LapNum INT,
+                m_bestSector3LapNum INT,
+                m_sessionUID INT,
+                m_sessionTime REAL,
+                m_frameIdentifier INT);`);
+	return;
 }
 function carDamage(db) {
 	db.run(`CREATE TABLE IF NOT EXISTS carDamage(m_tyresWear REAL,
