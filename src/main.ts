@@ -7,6 +7,7 @@ const db = dbSetup();
 const client: F1TelemetryClient = new F1TelemetryClient();
 
 /*
+TODO do 3 & 8 telemetry
 // event 3
 client.on('event', function (data) {
 	console.log(data);
@@ -19,7 +20,7 @@ client.on('finalClassification', function (data) {
 	console.log(data);
 });
 
-
+*/
 
 // motion 0
 client.on('motion', function (data) {
@@ -71,7 +72,6 @@ client.on('session', function (data) {
 		'INSERT INTO marshalZones VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
 		m_marshalZones
 	);
-
 });
 
 // lap data 2
@@ -83,10 +83,7 @@ client.on('lapData', function (data) {
 		car['m_sessionTime'] = m_header['m_sessionTime'];
 		car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
 		car['indexx'] = i;
-		db.run(
-			'INSERT INTO lap VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-			objToListOfValues(car)
-		);
+		db.run('INSERT INTO lap VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
 	}
 });
 // participants 4
@@ -122,10 +119,7 @@ client.on('carSetups', function (data) {
 		car['m_sessionTime'] = m_header['m_sessionTime'];
 		car['m_frameIdentifier'] = m_header['m_frameIdentifier'];
 		car['indexx'] = i;
-		db.run(
-			'INSERT INTO carSetup VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-			objToListOfValues(car)
-		);
+		db.run('INSERT INTO carSetup VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
 	}
 });
 // car telemetry 6
@@ -212,7 +206,7 @@ client.on('carDamage', function (data) {
 		db.run('INSERT INTO carDamage VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', objToListOfValues(car));
 	}
 	client.stop();
-});// session history 11
+}); // session history 11
 client.on('sessionHistory', function (data) {
 	var m_header = data['m_header'];
 	delete data['m_header'];
@@ -244,8 +238,6 @@ client.on('sessionHistory', function (data) {
 		db.run('INSERT INTO tyreStintHistory VALUES (?,?,?,?,?,?,?)', objToListOfValues(lap));
 	}
 });
-
-*/
 
 // to start listening:
 
